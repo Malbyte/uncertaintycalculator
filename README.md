@@ -1,11 +1,11 @@
 # uncertaintycalculator
-Allows users to perform calculations and see the new uncertainties
+Allows users to perform calculations and see the new uncertainties.
 
 # Installing
-1. Download or update java runtime to the latest version (https://www.java.com/en/)
-2. Download the latest released version of the calculator from the releases page
-3. Once downloaded, extract the zip file to your path choice
-4. To run, double click on the jar file.
+1. Download or update java runtime to the latest version (https://www.java.com/en/).
+2. Download the latest released version of the calculator from the releases page.
+3. Once downloaded, extract the zip file to your path choice.
+4. To run, open cmd or powershell in the folder and run "java uncercal".
 
 # commands
 To go back to a parent menu, you enter an empty line as an input<br />
