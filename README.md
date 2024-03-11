@@ -9,6 +9,7 @@ Allows users to perform calculations and see the new uncertainties.
 
 # commands
 To go back to a parent menu, you enter an empty line as an input.<br />
+
 am - Adds variables to the program along with their associated uncertainty.<br />
 pc - enters calculation mode.  The expression is expected to be in reverse polish notation for ease of reading The other arguments are denoted to start with a tick mark (`).<br />
 pt - prints the entire table of variables.<br />
