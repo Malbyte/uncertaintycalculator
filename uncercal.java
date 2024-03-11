@@ -143,7 +143,7 @@ class uncertaintyPrimitive{
   }
 }
 
-class uncertainty{
+class uncercal{
   static private final String SETTEXTRED = "\u001B[31m";
   static private final String SETTEXTGREEN = "\u001B[32m";
   static private final String SETTEXTBOLD = "\u001B[1m";
