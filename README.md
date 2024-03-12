@@ -5,7 +5,7 @@ Allows users to perform calculations and see the new uncertainties.
 1. Download or update java runtime to the latest version (https://www.java.com/en/).
 2. Download the latest released version of the calculator from the releases page.
 3. Once downloaded, extract the zip file to your path choice.
-4. To run, open cmd or powershell in the folder and run "java uncercal".
+4. To run, open cmd or powershell in the folder and run "java -jar uncercal.jar".
 
 # commands
 am - Adds variables to the program along with their associated uncertainty.<br />
