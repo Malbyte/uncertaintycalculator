@@ -19,15 +19,16 @@ class uncertaintyPrimitive{
   private double uncertaintyPercent;
 
   public uncertaintyPrimitive(String dataName, double data, double uncertainty){
-    this.dataName = dataName;
-    this.data = data;
-    this.uncertainty = uncertainty;
-    this.uncertaintyPercent = (uncertainty/data)*100;
+    setDataName(dataName);
+    setData(data);
+    setUncertainty(uncertainty);
+    setUncertaintyPercent((uncertainty/data)*100);
   }
   public uncertaintyPrimitive(String dataName){
-    this.dataName = dataName;
-    this.data = 0;
-    this.uncertainty = 0;
+    setDataName(dataName);
+    setData(0.0f);
+    setUncertainty(0.0f);
+    setUncertaintyPercent(0.0f);
   }
 
   public double getdata() {
@@ -44,15 +45,17 @@ class uncertaintyPrimitive{
   }
   public void setData(double data) {
       this.data = data;
+      uncertaintyPercent = ((uncertainty/data) * 100);
   }
   public void setDataName(String dataName) {
       this.dataName = dataName;
   }
   public void setUncertainty(double uncertainty) {
-      this.uncertainty = uncertainty;
+      this.uncertainty = Math.abs(uncertainty);
+      setUncertaintyPercent((uncertainty/data) * 100);
   }
-  public void setUncertaintyPercent(double uncertaintyPercent) {
-      this.uncertaintyPercent = uncertaintyPercent;
+  private void setUncertaintyPercent(double uncertaintyPercent) {
+      this.uncertaintyPercent = Math.abs(uncertaintyPercent);
   }
   ////////////////////////////////////////////////////NON OVERLOADED CALCULATIONS//////////////////////////////////////////////////////////
   //create new object type uncertaintyPrimitive where it is stored as the addition of two other given uncertainty objects
@@ -176,6 +179,15 @@ class uncercal{
           //System.out.println("EXITING MEASUREMENT INPUT MODE");
           clearScreen();
           printCommands();
+
+          continue;
+        }
+        if(userLine.contains("em")){
+          clearScreen();
+          editMeasurement();
+          clearScreen();
+          printCommands();
+
           continue;
         }
         if(userLine.contains("sf")){
@@ -222,6 +234,14 @@ class uncercal{
         }
         if(userLine.contains("r")){
           //r - reset values
+          resetMem();
+
+          clearScreen();
+          System.out.println("Memory cleared!\npress enter to continue...");
+          keyboard.nextLine();
+
+          clearScreen();
+          printCommands();
 
           continue;
         }
@@ -267,9 +287,97 @@ class uncercal{
       userLine = keyboard.nextLine();
     }
   }
+  static void editMeasurement(){
+    //em
+
+
+    userLine = "edit Measurements setup";
+    while (true){
+      uncertaintyPrimitive tempPrim = null;
+      clearScreen();
+
+      //print recent variable(s)
+      System.out.printf("Recently added variables:\n");
+      for(int i = 0; i < 3; i++){
+        if(i == uncertaintyTable.size()){
+          //have reached end of table...
+
+          break;
+        }
+        System.out.printf("%s\n", uncertaintyTable.get(uncertaintyTable.size() - (i + 1)).getdataName());
+      }
+
+      System.out.printf("input variable name\n> ");
+      userLine = keyboard.nextLine();
+      if(userLine.isBlank()){
+
+        break;
+      }
+      for (int i = 0; i < uncertaintyTable.size(); i++){
+        if(uncertaintyTable.get(i).getdataName().compareTo(userLine) == 0){
+          //found variable
+          tempPrim = uncertaintyTable.get(i);
+
+          break;
+        }
+      }
+      if (tempPrim == null){
+        System.out.println("ERROR: could not find variable name " + userLine + ".\nPress enter to continue...\n");
+        keyboard.nextLine();
+
+        continue;
+      }
+      clearScreen();
+      System.out.printf("VAR: %s\n", tempPrim.getdataName());
+      System.out.printf("input new data (press enter to not change)\ncurrent value : %f\n> ", tempPrim.getdata());
+      while(true){
+        userLine = keyboard.nextLine();
+        if(!userLine.isBlank()){
+          //set new value
+          try{
+            tempPrim.setData(Double.parseDouble(userLine));
+
+            break;
+          }
+          catch(Exception ex){
+            System.out.println("ERROR: invalid input!\npress enter to continue...");
+            keyboard.nextLine();
+
+            continue;
+          }
+        }
+
+        break;
+      }
+      clearScreen();
+      System.out.printf("VAR: %s\n", tempPrim.getdataName());
+      System.out.printf("input new uncertainty (press enter to not change)\ncurrent value : %f\n> ", tempPrim.getuncertainty());
+      while(true){
+        userLine = keyboard.nextLine();
+        if(!userLine.isBlank()){
+          //set new value
+          try{
+            tempPrim.setUncertainty(Double.parseDouble(userLine));
+
+            break;
+          }
+          catch(Exception ex){
+            System.out.println("ERROR: invalid input!\npress enter to continue...");
+            keyboard.nextLine();
+
+            continue;
+          }
+        }
+
+        break;
+      }
+    }
+
+  }
   static void performCalculation(){
     ArrayList<uncertaintyPrimitive> stack = new ArrayList<uncertaintyPrimitive>();
           int stackPointer = 0;
+          double literalIn = 0;
 
           uncertaintyPrimitive newPrim = null;
           String subString;
@@ -340,13 +448,23 @@ class uncercal{
                 }
                 //...
 
+                //substring must either be a literal or a variable
+                //check if is a literal
+                try{
+                  literalIn = Double.parseDouble(subString);
+                  //create temporary uncertainty primitive on stack
+                  stack.add(new uncertaintyPrimitive("Input literal", literalIn, 0.0f));
+
+                  continue;
+                }
+                catch(Exception ex) {
+
+                }
                 //must be name of variable, check list
                 for (int i = 0; i < uncertaintyTable.size(); i++){
                     if(uncertaintyTable.get(i).getdataName().compareTo(subString) == 0){
                       //add current variable onto stack
-                      //TODO: implement stack.add a copy of uncertaintyTable.get(i), to get a copy rather than a reference
-                      //then the math can be performed as a normal reverse polish notation calculator
-                      //stack.add(uncertaintyTable.get(i));
+
                       stack.add((uncertaintyPrimitive)uncertaintyTable.get(i).createCopy());
                       stackPointer++;
                       foundVar = true;
@@ -524,12 +642,12 @@ class uncercal{
     System.out.print("\033[H\033[2J");
   }
   static void resetMem(){
-
+    uncertaintyTable.clear();
 
   }
   static void printCommands(){
 
-    System.out.println("commands:\nam - add measurement\npc - perform calculations\npt - print table\nsf - set file\ne - exit");
+    System.out.println("commands:\nam - add measurement\nem - edit measurement\npc - perform calculations\npt - print table\nsf - set file\nc - clear screen\nr - reset internal table\ne - exit");
   }
 
   static void writeFileHeader() throws IOException{
