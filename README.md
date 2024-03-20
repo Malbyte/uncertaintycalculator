@@ -11,7 +11,7 @@ Allows users to perform calculations and see the new uncertainties.
 am - Adds variables to the program along with their associated uncertainty.<br />
 em - Edit variables.<br />
 dm - delete variables.<br />
-pc - Enters calculation mode.  The expression is expected to be in reverse polish notation for ease of reading The other arguments are denoted to start with a tick mark (`).<br />
+pc - Enters calculation mode.  The expression is expected to be in reverse polish notation for ease of reading<br /> The other arguments are denoted to start with a tick mark (`).<br />
 pt - Prints the entire table of variables.<br />
 sf - Sets the file to print to when opting to write a calculation out.<br />
 c  - Clears the screen.<br />
