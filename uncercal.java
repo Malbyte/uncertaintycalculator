@@ -464,6 +464,8 @@ class uncercal{
                   literalIn = Double.parseDouble(subString);
                   //create temporary uncertainty primitive on stack
                   stack.add(new uncertaintyPrimitive("Input literal", literalIn, 0.0f));
+                  stackPointer++;
+                  userLine = userLine.substring(subString.length()+1);
 
                   continue;
                 }
