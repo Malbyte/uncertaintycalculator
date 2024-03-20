@@ -190,6 +190,14 @@ class uncercal{
 
           continue;
         }
+        if(userLine.contains("dm")){
+          clearScreen();
+          deleteMeasurement();
+          clearScreen();
+          printCommands();
+
+          continue;
+        }
         if(userLine.contains("sf")){
           //sf - set file
           //sets the output file name if the user does not want to use the preset filename
@@ -645,9 +653,52 @@ class uncercal{
     uncertaintyTable.clear();
 
   }
+
+  static void deleteMeasurement(){
+    uncertaintyPrimitive tempPrim = null;
+    while(true){
+      clearScreen();
+      //print recent variable(s)
+      System.out.printf("Recently added variables:\n");
+      for(int i = 0; i < 3; i++){
+        if(i == uncertaintyTable.size()){
+          //have reached end of table...
+
+          break;
+        }
+        System.out.printf("%s\n", uncertaintyTable.get(uncertaintyTable.size() - (i + 1)).getdataName());
+      }
+      System.out.printf("input variable name\n> ");
+      userLine = keyboard.nextLine();
+      if(userLine.isBlank()){
+
+        break;
+      }
+      for (int i = 0; i < uncertaintyTable.size(); i++){
+        if(uncertaintyTable.get(i).getdataName().compareTo(userLine) == 0){
+          //found variable
+          //create copy temporarily to get name and to show that it was found
+          tempPrim = uncertaintyTable.get(i).createCopy();
+          uncertaintyTable.remove(i);
+
+          break;
+        }
+      }
+      if (tempPrim == null){
+        System.out.println("ERROR: could not find variable name " + userLine + ".\nPress enter to continue...\n");
+        keyboard.nextLine();
+
+        continue;
+      }
+      System.out.printf("Successfully emoved var %s!\npress enter to continue...", tempPrim.getdataName());
+      tempPrim = null;
+      keyboard.nextLine();
+    }
+  }
+
   static void printCommands(){
 
-    System.out.println("commands:\nam - add measurement\nem - edit measurement\npc - perform calculations\npt - print table\nsf - set file\nc - clear screen\nr - reset internal table\ne - exit");
+    System.out.println("commands:\nam - add measurement\nem - edit measurement\ndm - delete measurement\npc - perform calculations\npt - print table\nsf - set file\nc - clear screen\nr - reset internal table\ne - exit");
   }
 
   static void writeFileHeader() throws IOException{
