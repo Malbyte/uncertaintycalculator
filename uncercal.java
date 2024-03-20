@@ -396,9 +396,10 @@ class uncercal{
           // first arg is the reverse polish notation calculations to occur
           // second arg is denoted to start with a `, to which right after is the name
           // third arg is after the name also denoted with a `, this represents whether to write to output file after calculation
-          System.out.println("Calculator args: EXPRESSION, VARNAME, FILE?\t\t");
+          System.out.println("Calculator args: EXPRESSION `VARNAME `FILE?\t\t");
           System.out.printf("> ");
           userLine = keyboard.nextLine();
+
           while(!userLine.isBlank()){
             Boolean foundVar = false;
             if(userLine.contains(" ")){
@@ -407,6 +408,7 @@ class uncercal{
             else{
               subString = userLine.substring(1);
             }
+
               switch(currentOp){
               case NEWOBJ:
               currentOp = calculatorArgs.MATHEXP;
