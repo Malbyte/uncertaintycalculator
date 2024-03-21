@@ -413,6 +413,9 @@ class uncercal{
               case NEWOBJ:
               currentOp = calculatorArgs.MATHEXP;
               //DEPRECATED, PLEASE REMOVE ASAP!
+              //refresh calculator stack otherwise it'll ruin further calculations
+              stack.clear();
+              stackPointer = 0;
 
               continue;
               case MATHEXP:
@@ -476,9 +479,13 @@ class uncercal{
                 for (int i = 0; i < uncertaintyTable.size(); i++){
                     if(uncertaintyTable.get(i).getdataName().compareTo(subString) == 0){
                       //add current variable onto stack
-
-                      stack.add((uncertaintyPrimitive)uncertaintyTable.get(i).createCopy());
-                      stackPointer++;
+                      if(stack.size() > stackPointer){
+                        stack.set(stackPointer, (uncertaintyPrimitive)uncertaintyTable.get(i).createCopy());
+                      }
+                      else{
+                        stack.add((uncertaintyPrimitive)uncertaintyTable.get(i).createCopy());
+                      }
+                        stackPointer++;
                       foundVar = true;
 
                       break;
